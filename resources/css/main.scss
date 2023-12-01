@@ -1,0 +1,7 @@
+// main.styl
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+    background: var(--v-primary);
+}
+.theme--dark.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+    background: var(--v-primary);
+}
