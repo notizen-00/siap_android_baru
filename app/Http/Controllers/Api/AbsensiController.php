@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\AbsensiRequest;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
 use App\Services\Absensi\CheckLokasi;
+use App\Services\Absensi\CheckPerangkat;
+use App\Services\Absensi\CheckWaktu;
+
 class AbsensiController extends BaseController
 {
     /**
@@ -38,48 +43,42 @@ class AbsensiController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AbsensiRequest $request)
     {
-        // Save the image and get the file path
+        $validated = $request->validated();
+
         $imageFilePath = $this->simpanImage($request->image);
-       
-        // Additional data needed for CheckLokasiService, you need to customize this based on your actual data structure
-        $lokasiKaryawan = [
-            'latitude' => $request->lokasi_karyawan['lat'],
-            'longitude' => $request->lokasi_karyawan['lng'],
-            // ... other relevant data
-        ];
-      
-        $lokasiPenugasan = [
-            'latitude' => $request->lokasi_penugasan['lat'],
-            'longitude' => $request->lokasi_penugasan['lng'],
-            // ... other relevant data
-        ];
+        $lokasiKaryawan = $validated['lokasi_karyawan'];
+        $lokasiPenugasan = $validated['lokasi_penugasan'];
+        $radius = $validated['radius'];
+        $karyawanId = $validated['karyawan_id'];
+        $deviceId = $validated['device_id'];
+        
+        $lokasiService = app(CheckLokasi::class, compact('lokasiPenugasan', 'lokasiKaryawan', 'radius'));
+        $resultLokasi = $lokasiService->getResponse();
 
-        $radius = 10; // Set your desired radius
+        $waktuService = app(CheckWaktu::class, compact('karyawanId'));      
+        $resultWaktu = $waktuService->getResponse();
 
-        // Instantiate CheckLokasiService
-        $checkLokasiService = new CheckLokasi(
-            $request->input('karyawan_id'),
-            $lokasiKaryawan,
-            $lokasiPenugasan,
-            $radius
-        );
+        $perangkatService = app(CheckPerangkat::class, compact('karyawanId','deviceId'));      
+        $resultPerangkat = $perangkatService->getResponse();
 
-      
-        $lokasiServiceData = $checkLokasiService->getData([
-            'nama_divisi' => 'Your Divisi Name',
-            'sistem_kerja' => 1, // or 2 based on your logic
-            'pola_kerja' => [
-                'id' => 1, // Example ID
-                // ... other relevant data
-            ],
-         
-        ]);
+        if($resultLokasi === true && $resultPerangkat === true && $resultWaktu === true)
+        {
 
-        $response = array_merge($lokasiServiceData);
+            $response = 'selamat anda berhasil absen';
+           return  $this->sendResponse($response,'test');
+            
 
-        return response()->json($response);
+        }else{
+
+            $response[] = ['Gagal Absen'=>'gagal'];
+
+            return $this->sendError('Validation Error.', $response,201);    
+
+        }
+
+
     }
 
     /**

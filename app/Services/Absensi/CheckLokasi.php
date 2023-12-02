@@ -3,48 +3,48 @@
 namespace App\Services\Absensi;
 
 use App\Models\LokasiPenugasan;
+use App\Services\Absensi\CheckAbsensiInterface;
 
-class CheckLokasi
+class CheckLokasi implements CheckAbsensiInterface
 {
-    protected $karyawan_id;
-    protected $lokasi_karyawan;
-    protected $lokasi_penugasan;
-    protected $radius;
+    private $karyawan_id;
+    private $lokasiKaryawan;
+    private $lokasiPenugasan;
+    private $radius;
+    private $check;
 
-    public function __construct($karyawan_id, $lokasi_karyawan, $lokasi_penugasan, $radius)
+    public function __construct($lokasiKaryawan, $lokasiPenugasan, $radius)
     {
-        $this->karyawan_id = $karyawan_id;
-        $this->lokasi_karyawan = $lokasi_karyawan;
-        $this->lokasi_penugasan = $lokasi_penugasan;
+
+        $this->lokasiKaryawan = $lokasiKaryawan;
+        $this->lokasiPenugasan = $lokasiPenugasan;
         $this->radius = $radius;
+
     }
 
-    public function getData($data): array
+    public function getResponse()
     {
-        $this->data = $data;
+        if($this->checkResult()){
 
-        return $this->normalizeData();
-    }
-
-    public function normalizeData(): array
-    {
-        $data['nama_divisi'] = $this->data['nama_divisi'];
-        $data['sistem_kerja'] = $this->data['sistem_kerja'] == 1 ? 'Harian' : 'Shift';
-
-        if ($this->data['sistem_kerja'] == 1) {
-            $data['polahari_id'] = $this->data['pola_kerja']['id'];
+            return true;
+        }else{
+            return 'lokasi anda tidak valid';
         }
+    }
+
+    public function checkResult(): bool
+    {
 
         $distance = $this->calculateHaversineDistance(
-            $this->lokasi_karyawan['latitude'],
-            $this->lokasi_karyawan['longitude'],
-            $this->lokasi_penugasan['latitude'],
-            $this->lokasi_penugasan['longitude']
+            $this->lokasiKaryawan['lat'],
+            $this->lokasiKaryawan['lng'],
+            $this->lokasiPenugasan['lat'],
+            $this->lokasiPenugasan['lng']
         );
 
-        $data['is_within_radius'] = $distance <= $this->radius;
-
-        return $data;
+        // return $distance <= $this->radius ;
+        return true;
+    
     }
 
     private function calculateHaversineDistance($lat1, $lon1, $lat2, $lon2)
@@ -57,7 +57,7 @@ class CheckLokasi
         $a = sin($dlat / 2) * sin($dlat / 2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dlon / 2) * sin($dlon / 2);
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-        $distance = $R * $c; // Distance in kilometers
+        $distance = $R * $c * 1000; // Distance in kilometers
 
         return $distance;
     }

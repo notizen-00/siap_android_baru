@@ -2,32 +2,36 @@
 
 namespace App\Services\Absensi;
 
+
 use App\Services\Absensi\CheckAbsensiInterface;
 
-class CheckPerangkat implements CheckAbsensiInterface
+
+class CheckWaktu implements CheckAbsensiInterface
 {
 
-    private $deviceId;
+    private $data;
+    private $karyawanId;
     private $check;
-    public function __construct($deviceId)
-    {
-        $this->deviceId = $deviceId;
-    }
 
+    public function __construct($karyawanId)
+    {
+
+        $this->karyawanId = $karyawanId;
+    }
+    
     public function getResponse()
     {
         if($this->checkResult()){
 
             return true;
         }else{
-            return 'Perangkat anda tidak valid';
+            return 'Waktu Anda Tidak Valid';
         }
     }
 
-
     public function checkResult(): bool
     {
-        
+
        return true;
     }
 }
