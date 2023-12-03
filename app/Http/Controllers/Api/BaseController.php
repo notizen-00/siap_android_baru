@@ -42,10 +42,20 @@ class BaseController extends Controller
         ];
 
 
-        if(!empty($errorMessages)){
-            $response['data'] = $errorMessages;
+        if (!empty($errorMessages)) {
+            // Convert associative array to a flat list of errors
+            $errors = [];
+    
+            foreach ($errorMessages as $type => $message) {
+                $errors[] = [
+                    'type' => $type,
+                    'error_message' => $message,
+                ];
+            }
+    
+            $response['data'] = $errors;
         }
-
+    
 
         return response()->json($response, $code);
     }

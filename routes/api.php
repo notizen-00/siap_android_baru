@@ -24,5 +24,6 @@ Route::middleware('auth:sanctum')->group( function () {
     Route::resource('karyawan_api', KaryawanController::class);
     Route::get('karyawan/lokasi_penugasan', 'App\Http\Controllers\Api\KaryawanController@getLokasiPenugasan');
     Route::resource('absensi',AbsensiController::class);
+    Route::post('doAbsen',[AbsensiController::class,'doAbsen']);
     Route::post('logout', 'App\Http\Controllers\Api\LoginController@logout');
 });

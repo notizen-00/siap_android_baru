@@ -7,11 +7,13 @@ use App\Services\Absensi\CheckAbsensiInterface;
 
 class CheckLokasi implements CheckAbsensiInterface
 {
+    private $data = [];
     private $karyawan_id;
     private $lokasiKaryawan;
     private $lokasiPenugasan;
     private $radius;
     private $check;
+    private $error;
 
     public function __construct($lokasiKaryawan, $lokasiPenugasan, $radius)
     {
@@ -22,19 +24,25 @@ class CheckLokasi implements CheckAbsensiInterface
 
     }
 
+    public function setError($error)
+    {
+        $this->error = $error;
+    }
+    public function setResponseData($name,$value)
+    {
+        return $this->data[$name] = $value;
+    }
+    public function getResponseData()
+    {
+        return $this->data;
+    }
     public function getResponse()
     {
-        if($this->checkResult()){
-
-            return true;
-        }else{
-            return 'lokasi anda tidak valid';
-        }
+        return $this->checkResult() ? true : $this->getErrorObject();
     }
 
     public function checkResult(): bool
     {
-
         $distance = $this->calculateHaversineDistance(
             $this->lokasiKaryawan['lat'],
             $this->lokasiKaryawan['lng'],
@@ -42,9 +50,22 @@ class CheckLokasi implements CheckAbsensiInterface
             $this->lokasiPenugasan['lng']
         );
 
-        // return $distance <= $this->radius ;
+        if ($distance > $this->radius) {
+            $this->setError('Anda tidak berada di lokasi penugasan');
+            return false;
+        }
+
+        $this->setResponseData('lokasi_absen', [
+            'lat'=>$this->lokasiKaryawan['lat'],
+            'lng'=>$this->lokasiKaryawan['lng']
+        ]);
         return true;
-    
+    }
+
+
+    public function getErrorObject()
+    {
+        return $this->error;
     }
 
     private function calculateHaversineDistance($lat1, $lon1, $lat2, $lon2)

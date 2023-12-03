@@ -7,7 +7,7 @@ use App\Http\Requests\Api\AbsensiRequest;
 use App\Http\Controllers\Api\BaseController as BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Presensi;
 use App\Services\Absensi\CheckLokasi;
 use App\Services\Absensi\CheckPerangkat;
 use App\Services\Absensi\CheckWaktu;
@@ -40,6 +40,19 @@ class AbsensiController extends BaseController
         return $filePath; 
     }
 
+    public function doAbsen(Request $request)
+    {
+        $imageFilePath = $this->simpanImage($request->image);
+
+        $presensi = Presensi::create([
+            'karyawan_id'=>$request->karyawan_id,
+            'image'=>$imageFilePath,
+            
+        ]);
+
+        return response()->json($request->device_id);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -47,12 +60,15 @@ class AbsensiController extends BaseController
     {
         $validated = $request->validated();
 
-        $imageFilePath = $this->simpanImage($request->image);
+
         $lokasiKaryawan = $validated['lokasi_karyawan'];
+        $device = $validated['device'];
         $lokasiPenugasan = $validated['lokasi_penugasan'];
         $radius = $validated['radius'];
         $karyawanId = $validated['karyawan_id'];
         $deviceId = $validated['device_id'];
+
+        
         
         $lokasiService = app(CheckLokasi::class, compact('lokasiPenugasan', 'lokasiKaryawan', 'radius'));
         $resultLokasi = $lokasiService->getResponse();
@@ -60,21 +76,40 @@ class AbsensiController extends BaseController
         $waktuService = app(CheckWaktu::class, compact('karyawanId'));      
         $resultWaktu = $waktuService->getResponse();
 
-        $perangkatService = app(CheckPerangkat::class, compact('karyawanId','deviceId'));      
+        $perangkatService = app(CheckPerangkat::class, compact('karyawanId' , 'device'));      
         $resultPerangkat = $perangkatService->getResponse();
-
+        // return response()->json($resultPerangkat);
         if($resultLokasi === true && $resultPerangkat === true && $resultWaktu === true)
         {
 
-            $response = 'selamat anda berhasil absen';
-           return  $this->sendResponse($response,'test');
+            $response = array_merge(
+                $waktuService->getResponseData(),
+                $lokasiService->getResponseData(),
+                $perangkatService->getResponseData()
+            );
+            // $response = 'Check Lokasi dan device valid Silahkan ambil Foto';
+        
+            return  $this->sendResponse($response,'test');
             
 
         }else{
 
-            $response[] = ['Gagal Absen'=>'gagal'];
+            $errors = [];
 
-            return $this->sendError('Validation Error.', $response,201);    
+            if ($resultLokasi !== true) {
+                $errors['lokasi'] = $resultLokasi;
+            }
+
+            if ($resultPerangkat !== true) {
+                $errors['perangkat'] = $resultPerangkat;
+            }
+            
+            if ($resultWaktu !== true) {
+                $errors['waktu'] = $resultWaktu;
+            }
+            
+         
+             return $this->sendError('Absen Gagal Di Simpan', $errors, 201);
 
         }
 

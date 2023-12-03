@@ -24,4 +24,9 @@ class Divisi extends Model
     {
         return $this->hasOne(PolaHarian::class,'id','polahari_id');
     }
+
+    public function rules_presensi()
+    {
+        return $this->hasOne(RulesPresensi::class,'id','rules_presensi_id');
+    }
 }
