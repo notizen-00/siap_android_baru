@@ -1,5 +1,11 @@
 <template>
-   
+
+    
+    <Alert>
+      <template #flash_session>
+        {{ $page.props.session.success ? $page.props.session.success : ""}}
+      </template>
+    </Alert>
     <v-data-table
       :headers="headers"
       :items="listData"
@@ -11,18 +17,19 @@
         <tr>
           <td>{{ item.raw.nama_lokasi }}</td>
           <td>{{ item.raw.radius_lokasi }}  </td>
-          <td>
-            <v-list lines="one">
-              <v-list-item
-                v-for="n in 3"
-                :key="n"
-                :title="'Item ' + n"
-                subtitle="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-             
-              ></v-list-item>
-            </v-list>
+          <td class="text-left">
+            <v-btn  color="primary" size="small">
+              <template #append>
+                <v-icon color="white" size="12">fas fa-users</v-icon>
+              </template>
+               {{ item.raw.total_karyawan }}
+            </v-btn>
           </td>
-          <td><v-btn icon="fas fa-edit" size="5" @click.prevent="store.lokasiStore.editForm(item.raw.id)"></v-btn></td>
+          <td>
+            <v-btn icon="fas fa-edit" color="info" size="small" @click.prevent="store.lokasiStore.editForm(item.raw.id)"></v-btn>
+            <v-btn icon="fas fa-trash" class="ml-3" color="red" size="small" @click="deletePost(item.raw.id)"></v-btn>
+          
+          </td>
          
         </tr>
       </template>
@@ -31,6 +38,8 @@
   </template>
   <script setup>
   import { ref,inject } from 'vue';
+  import Alert from '@/Components/App/Alert.vue';
+  import { router } from '@inertiajs/vue3'
   const store = inject('store')
   defineProps({
     search:String,
@@ -50,6 +59,14 @@
    
   
   ];
+
+  const deletePost = (id) => {
+    router.delete(route('lokasi.destroy', id), {preserveScroll: true})
+
+    store.alertStore.toggleAlert();
+  }
+
+
 
 
  

@@ -14,8 +14,10 @@ class LokasiKehadiranController extends Controller
      */
     public function index()
     {
-        $listData = LokasiKehadiran::get();
-        
+        $listData = LokasiKehadiran::with('lokasiPenugasan')->get();
+        $listData->each(function ($lokasi) {
+            $lokasi->total_karyawan = $lokasi->countLokasiPenugasanKaryawan();
+        });
         return Inertia::render('Lokasi/Index',[
             'listData' => $listData
         ]);
@@ -82,6 +84,14 @@ class LokasiKehadiranController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = LokasiKehadiran::findOrFail($id);
+        
+        try{
+            $data->delete();
+        }catch(Exception $e){
+            return response()->json(array('error' => $e->getMessage));
+        }
+    
+        return to_route('lokasi.index')->with('success','Data Berhasil Di Hapus');
     }
 }

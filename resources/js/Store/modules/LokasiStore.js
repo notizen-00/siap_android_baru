@@ -89,6 +89,13 @@ async Mapss(){
           // Handle any errors here
           console.error('Error fetching data:', error);
         }
+      },
+      async delete(id){
+
+        const response = await axios.post('/kelola_karyawan/lokasi/'+id,{
+          
+        });
+
       }
 
 

@@ -26,6 +26,7 @@ const circleOptions = computed(() => ({
   fillOpacity: 0.35,
   strokeWeight: 2,
   strokeColor: '#0000FF',
+  
 }));
 
 
@@ -39,13 +40,11 @@ const onMarkerDragEnd = (event) => {
     lat: event.latLng.lat(),
     lng: event.latLng.lng(),
   };
-//   center.value = newPosition;
-  // Update properti markerOptions dengan koordinat baru
-//   markerOptions.value.position = newPosition;
+
   store.lokasiStore.changeCenter(newPosition);
   circleKey.value += 1;
   
-//   console.log(center.value)
+
 
 };
 

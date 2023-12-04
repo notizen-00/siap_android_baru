@@ -19,6 +19,13 @@ class LokasiKehadiran extends Model
 
     public function LokasiPenugasan()
     {
-        return $this->belongsTo(LokasiPenugasan::class,'lokasi_id','id');
+        return $this->hasMany(LokasiPenugasan::class,'lokasi_id','id');
     }
+
+    public function countLokasiPenugasanKaryawan()
+    {
+        return $this->LokasiPenugasan()->count();
+    }
+
+
 }

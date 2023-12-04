@@ -99,7 +99,7 @@ const page = usePage();
 const props = defineProps({
     listData:Object
 })
-// console.log(page.props);
+console.log(page.props.listData);
 
 
 const search = ref('')
