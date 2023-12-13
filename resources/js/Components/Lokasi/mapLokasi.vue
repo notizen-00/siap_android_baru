@@ -38,7 +38,7 @@ const markerOptions = ref({
 const onMarkerDragEnd = (event) => {
   const newPosition = {
     lat: event.latLng.lat(),
-    lng: event.latLng.lng(),
+    lng: event.latLng.lng(),  
   };
 
   store.lokasiStore.changeCenter(newPosition);

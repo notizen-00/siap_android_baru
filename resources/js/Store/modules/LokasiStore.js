@@ -46,7 +46,7 @@
         }
 
     },
-async Mapss(){
+    async Mapss(){
         const apiKey = 'AIzaSyBeeo9yBypCnU7vRHINzcgKfFhS-huXAgo';
         const latitude = -8.1642453196032; 
         const longitude = 113.71720185588; 
@@ -93,7 +93,7 @@ async Mapss(){
       async delete(id){
 
         const response = await axios.post('/kelola_karyawan/lokasi/'+id,{
-          
+
         });
 
       }

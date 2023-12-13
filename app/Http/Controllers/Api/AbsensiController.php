@@ -108,8 +108,7 @@ class AbsensiController extends BaseController
                 $errors['waktu'] = $resultWaktu;
             }
             
-         
-             return $this->sendError('Absen Gagal Di Simpan', $errors, 201);
+            return $this->sendError('Absen Gagal Di Simpan', $errors, 201);
 
         }
 

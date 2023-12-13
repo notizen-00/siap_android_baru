@@ -83,6 +83,7 @@ class CheckPerangkat implements CheckAbsensiInterface
         }else{
 
             if($device->id_device == $this->device['id']){
+                
                 $this->setResponseData('id_device', $this->device['id']);
                     return true;
             }else{

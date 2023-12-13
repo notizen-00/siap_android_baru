@@ -17,7 +17,9 @@ class AbsensiServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(CheckAbsensiInterface::class, function ($app) {
-            return $app->make(CheckLokasi::class);
+            return $app->make(CheckLokasi::class,[
+                'lokasiKaryawan'=>$lokasiKaryawan
+            ]);
         });
 
         $this->app->singleton(CheckAbsensiInterface::class, function ($app) {

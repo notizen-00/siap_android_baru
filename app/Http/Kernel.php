@@ -41,14 +41,12 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-          
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \App\Http\Middleware\BearerTokenMiddleware::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
-  
     /**
      * The application's middleware aliases.
      *
@@ -71,6 +69,5 @@ class Kernel extends HttpKernel
         'bearer.token' => \App\Http\Middleware\BearerTokenMiddleware::class,
         'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
-       
     ];
 }
