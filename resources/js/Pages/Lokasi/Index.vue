@@ -94,7 +94,7 @@
                     <br>
                     <br>
           
-                    <FormPenugasan :listKaryawanPenugasan="listPenugasan" />
+                    <FormPenugasan :listKaryawanPenugasan="listPenugasan"  />
                   </v-card-text>
                 </v-card>
               </v-bottom-sheet>
@@ -122,11 +122,15 @@ const props = defineProps({
     listData:Object,
     listPenugasan:Object,
 })
-console.log(props.listPenugasan);
+
 
 
 const search = ref('')
 const alert = ref(false)
+
+onMounted(()=>{
+  store.karyawanStore.fetchKaryawan()
+})
 
 
 </script>

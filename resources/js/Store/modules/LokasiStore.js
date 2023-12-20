@@ -11,7 +11,8 @@
         lat:-8.1665658046624,
         lng:113.71517142366
       },
-      listDetail:[]
+      listDetail:[],
+      detailPenugasan:[],
 
     }),
     actions: {
@@ -28,7 +29,6 @@
       changeRadius(value){
         this.radius = parseInt(value);
         
-       
       },
       async fetchPenugasanKaryawan(){
         const response = await axios.get('/api/karyawan/lokasi_penugasan');
@@ -81,7 +81,7 @@
       },
       async toggleDialogPenugasan()
       {
-         this.dialogPenugasan = !this.dialogPenugasan
+        this.dialogPenugasan = !this.dialogPenugasan
       },
       async editForm(id) {
         try {
@@ -102,6 +102,18 @@
           // Handle any errors here
           console.error('Error fetching data:', error);
         }
+      },
+      async editFormPenugasan(id)
+      {
+        const response = await axios.get('/kelola_karyawan/lokasi_penugasan/'+id);
+        if(response.status == 200){
+          this.penugasanSheet = !this.penugasanSheet
+          this.detailPenugasan = response.data;
+        }else{
+          alert('gagal mengambil data')
+        }
+        
+
       },
       async delete(id){
 
@@ -126,6 +138,9 @@
         return this.center;
         
       },
+      getDetailPenugasan(){
+        return this.detailPenugasan
+      },
       isPenugasanSheetActive(){
         return this.penugasanSheet;
       },
@@ -134,7 +149,26 @@
       },
       getListDetail(){
         return this.listDetail;
-      }
+      },
+      getKaryawanPenugasan(state) {
+        const karyawanArray = state.detailPenugasan[0].karyawan || [];
+        
+        // Object.keys(karyawanArray).forEach(function(key, index) {
+        //   // return key;
+        //   console.log(index)
+        // });
+        console.log(state.detailPenugasan)
+      //   if (Array.isArray(karyawanArray)) {
+      //     return karyawanArray.map((karyawan) => ({
+      //         item: karyawan.nama_karyawan,
+      //         value: karyawan.id
+      //     }));
+      // } else {
+      //     console.error("karyawanArray is not an array");
+      //     console.log(state.detailPenugasan.karyawan)
+      //     return [];
+      // }
+    }
     }
     ,
   persist: true

@@ -31,7 +31,6 @@ class AbsensiController extends BaseController
     }
 
     public function simpanImage($base64Data) {
-   
         $binaryData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Data));
     
         $filePath = 'image_presensi/' . uniqid() . '.jpg'; 
@@ -59,8 +58,6 @@ class AbsensiController extends BaseController
     public function store(AbsensiRequest $request)
     {
         $validated = $request->validated();
-
-
         $lokasiKaryawan = $validated['lokasi_karyawan'];
         $device = $validated['device'];
         $lokasiPenugasan = $validated['lokasi_penugasan'];

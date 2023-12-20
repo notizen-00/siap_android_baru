@@ -24,7 +24,6 @@ class KaryawanController extends BaseController
     {
 
         $karyawan = Karyawan::with('divisi')->with('user')->get();
-        
         return $this->sendResponse($karyawan, 'Karyawan retrieved successfully.');
     }
     /**
@@ -36,18 +35,14 @@ class KaryawanController extends BaseController
     public function store(Request $request): JsonResponse
     {
         $input = $request->all();
-   
         $validator = Validator::make($input, [
             'name' => 'required',
             'detail' => 'required'
         ]);
-   
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
         $product = Product::create($input);
-   
         return $this->sendResponse(new ProductResource($product), 'Product created successfully.');
     } 
 
@@ -57,7 +52,6 @@ class KaryawanController extends BaseController
         $data = LokasiPenugasan::with('lokasi')->where('users_id',$id)->get();
         return $this->sendResponse($data,'Data Lokasi Penugasan Sukses');
     }
-   
     /**
      * Display the specified resource.
      *
@@ -67,12 +61,10 @@ class KaryawanController extends BaseController
     public function show($id): JsonResponse
     {
         $karyawan = Karyawan::with('divisi')->with('user')->where('users_id',$id)->first();
-       
     
         if (is_null($karyawan)) {
             return $this->sendError('Karyawan not found.');
         }
-   
         return $this->sendResponse($karyawan, 'karyawan telah di show secara sukses');
     }
     
@@ -86,23 +78,18 @@ class KaryawanController extends BaseController
     public function update(Request $request, Product $product): JsonResponse
     {
         $input = $request->all();
-   
         $validator = Validator::make($input, [
             'name' => 'required',
             'detail' => 'required'
         ]);
-   
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
         $product->name = $input['name'];
         $product->detail = $input['detail'];
         $product->save();
-   
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');
     }
-   
     /**
      * Remove the specified resource from storage.
      *
@@ -112,7 +99,6 @@ class KaryawanController extends BaseController
     public function destroy(Product $product): JsonResponse
     {
         $product->delete();
-   
         return $this->sendResponse([], 'Product deleted successfully.');
     }
 }

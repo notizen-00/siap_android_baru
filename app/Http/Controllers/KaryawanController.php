@@ -26,6 +26,15 @@ class KaryawanController extends Controller
         ]);                
     }
 
+    public function ajaxData()
+    {  
+        $data = Karyawan::with('divisi')->with('user')->get();
+
+        if($data){
+            return response()->json($data,200);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

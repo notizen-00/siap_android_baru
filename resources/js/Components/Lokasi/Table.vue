@@ -23,7 +23,7 @@
               <template #append>
                 <v-icon color="white" size="12">fas fa-users</v-icon>
               </template>
-               {{ item.raw.total_karyawan }}
+            {{ item.raw.total_karyawan }}
             </v-btn>
           </td>
           <td>
@@ -32,7 +32,7 @@
                 <v-icon size="15" class="m-1" >fas fa-edit</v-icon>
               </template>
             </v-btn>
-            <v-btn color="warning" @click="store.lokasiStore.togglePenugasanSheet()" class="ml-3" size="xsmall">
+            <v-btn color="warning" @click="store.lokasiStore.editFormPenugasan(item.raw.id)" class="ml-3" size="xsmall">
               <template #append>
                 <v-icon size="15" class="m-1" >fas fa-bars-staggered</v-icon>
               </template>
@@ -44,11 +44,9 @@
             </v-btn>
           
           </td>
-         
         </tr>
       </template>
     </v-data-table>
-   
     
   </template>
   <script setup>
@@ -72,7 +70,6 @@
     { title: 'Radius(Meter)', key: 'id' },
     { title: 'Karyawan Ditugaskan', key: 'toleransi_keterlambatan' },
     { title: 'Aksi', key: 'Aksi' },
-   
   
   ];
 
@@ -82,10 +79,6 @@
     store.alertStore.toggleAlert();
   }
 
-
-
-
- 
   </script>
 <style scoped>
 

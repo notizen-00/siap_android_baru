@@ -26,7 +26,6 @@ Route::get('/', function () {
 
 
 Route::post('/apis/login', 'App\Http\Controllers\Api\LoginController@login');
-   
 
 
 Route::middleware([
@@ -42,8 +41,10 @@ Route::middleware([
     Route::resource('polakerja/harian',$controller.'\PolaHarianController');
     Route::resource('polakerja/shift',$controller.'\PolaShiftController');
     Route::resource('kelola_karyawan/divisi',$controller.'\DivisiController');
+    Route::get('kelola_karyawan/ajax/karyawan',[$controller.'\KaryawanController','ajaxData']);
     Route::resource('kelola_karyawan/karyawan',$controller.'\KaryawanController');
     Route::resource('kelola_karyawan/lokasi',$controller.'\LokasiKehadiranController');
+    Route::resource('kelola_karyawan/lokasi_penugasan',$controller.'\LokasiPenugasanController');
     Route::resource('kehadiran',$controller.'\KehadiranController');
     
 });

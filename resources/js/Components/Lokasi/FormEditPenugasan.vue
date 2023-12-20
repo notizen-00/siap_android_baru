@@ -2,8 +2,6 @@
     <v-container fluid>
         <div class="text-h5 text-left mb-5"># Karyawan di tugaskan</div>
         <form @submit.prevent="submit">
-         
-                
                     <v-row>
                         <v-col cols="3">
                             <InputLabel for="nama_lokasi" class="mt-5 text-start">
@@ -14,9 +12,23 @@
                             <TextInput id="nama_lokasi" v-model="form.nama_lokasi"  class="mt-1 block w-full"
                                 autofocus autocomplete="nama_lokasi" />
                             <InputError class="mt-2" :message="form.errors.nama_lokasi" />
+
                         </v-col>
                     </v-row>
-
+                    <div class="h-100 overflow-auto mt-10">
+                        <span class="text-red-400 mt-10">Karyawan Di tugaskan</span>
+                        <v-list lines="two" max-height="200" max-width="500" class="mx-auto mt-5 mb-5">
+                            <v-list-item
+                                class="bg-red-400"
+                                v-for="n in values"
+                                :key="n"
+                                :title="n.item"
+                                :subtitle="'Jabatan '+ n.jabatan"
+                                prepend-avatar="https://randomuser.me/api/portraits/women/8.jpg"
+                            ></v-list-item>
+                            
+                            </v-list>
+                    </div>
                     <v-row>
                         <v-col cols="3">
                             <InputLabel for="radius_lokasi" class="mt-5 text-start">
@@ -26,18 +38,19 @@
                         <v-col cols="9">
                             <v-select
                             clearable
+                            v-model="form.karyawan_id"
                             chips
                             label="Pilih Karyawan"
                             density="compact"
-                            variant="underlined"
-                            :items="listKaryawanPenugasan"
+                            variant="outlined"
+                            :items="listKaryawan"
+                            item-title="item"
+                            item-value="value"
                             multiple
-                          ></v-select>
+                            >
+                            </v-select>
                         </v-col>
                     </v-row>
-                
-
-                 
                     <PrimaryButton type="submit" @click="color = '#ff00ff'" class="ml-4 bg-primary mt-10"
                         :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         <i class="fas fa-save mr-2"></i> Update Data
@@ -63,31 +76,35 @@
     import TextInput from '@/Components/TextInput.vue';
     import { storeToRefs } from 'pinia'
     const store = inject('store')
-    const { getRadius,getCenter,getListDetail } = storeToRefs(store.lokasiStore)
+    const { getRadius,getCenter,getListDetail,getDetailPenugasan,getKaryawanPenugasan } = storeToRefs(store.lokasiStore)
+    const {getKaryawan} = storeToRefs(store.karyawanStore)
     const page = usePage();
+    const values = ref([])
+    const listKaryawan = ref([]);
+
     const form = useForm({
-        nama_lokasi:getListDetail.value.nama_lokasi,
-        radius_lokasi:getListDetail.value.radius_lokasi,
+        nama_lokasi:getDetailPenugasan.value[0].lokasi.nama_lokasi,
+        karyawan_id:values.value
     })
-   const props = defineProps({
+    const props = defineProps({
         listKaryawanPenugasan:Object
     })
     const radius = computed(() => {
         return parseInt(form.radius_lokasi);
     });
+
+
     const changeRadius = () =>{
         store.lokasiStore.changeRadius(form.radius_lokasi);
     }
 
     const submit = () => {
         // console.log(form.latitude)
-
+        // console.log(form.karyawan_id);
         form.transform(data => ({
             ...data,
-            latitude:getCenter.value.lat,
-            longitude:getCenter.value.lng,
             _token: page.props.auth.csrf,
-        })).post(route('lokasi.store'), {
+        })).post(route('lokasi_penugasan.update'), {
             onFinish: (data) => {
                 store.lokasiStore.togglePenugasanSheet()
                 // console.log(data)
@@ -96,7 +113,24 @@
     };
 
     onMounted(()=>{
-        store.lokasiStore.fetchPenugasanKaryawan()
-        console.log(props.listKaryawanPenugasan)
+        getDetailPenugasan.value.forEach((user) => {
+        form.karyawan_id.push({
+            item:user.karyawan.nama_karyawan,
+            value:user.karyawan.id
+        })
+        values.value.push({
+            item:user.karyawan.nama_karyawan,
+            value:user.karyawan.id,
+            jabatan:user.karyawan.jabatan
+        })
+    });
+        console.log(getKaryawan.value)
+        getKaryawan.value.forEach((user) => {
+                listKaryawan.value.push({
+                item: user.nama_karyawan,
+                value: user.id
+        });
+        });
+
     })
 </script>
