@@ -58,7 +58,23 @@ class LokasiPenugasanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $karyawan = $request->karyawan_id;
+        $upsert = [];
+        foreach($karyawan as $i)
+        {   
+            $upsert[] = [
+                'lokasi_id'=>$request->lokasi_id,
+                'karyawan_id'=>$i 
+            ];
+        }
+        // dd($upsert);
+        $proses = LokasiPenugasan::upsert($upsert,['lokasi_id'],['karyawan_id']);
+        if($proses){
+            return to_route('lokasi.index');
+        }else{
+            return response()->json($upsert);
+        }
+        
     }
 
     /**

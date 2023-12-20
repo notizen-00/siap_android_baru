@@ -84,7 +84,8 @@
 
     const form = useForm({
         nama_lokasi:getDetailPenugasan.value[0].lokasi.nama_lokasi,
-        karyawan_id:values.value
+        karyawan_id:values.value,
+        lokasi_id:getDetailPenugasan.value[0].lokasi.id
     })
     const props = defineProps({
         listKaryawanPenugasan:Object
@@ -104,8 +105,12 @@
         form.transform(data => ({
             ...data,
             _token: page.props.auth.csrf,
-        })).post(route('lokasi_penugasan.update'), {
+            _method: "put",
+        })).post(route('lokasi_penugasan.update',getDetailPenugasan.value[0].lokasi.id), {
             onFinish: (data) => {
+                if(data == 2){
+                    alert('test')
+                }
                 store.lokasiStore.togglePenugasanSheet()
                 // console.log(data)
             },
@@ -128,7 +133,7 @@
         getKaryawan.value.forEach((user) => {
                 listKaryawan.value.push({
                 item: user.nama_karyawan,
-                value: user.id
+                value: user.id,
         });
         });
 

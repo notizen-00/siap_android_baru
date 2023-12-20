@@ -88,7 +88,6 @@
             _token: page.props.auth.csrf,
         })).post(route('lokasi.store'), {
             onFinish: (data) => {
-                store.lokasiStore.toggleSheet()
                 // console.log(data)
             },
         });
