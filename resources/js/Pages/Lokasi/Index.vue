@@ -77,6 +77,27 @@
                   </v-card-text>
                 </v-card>
               </v-bottom-sheet>
+
+              <v-bottom-sheet v-model="isPenugasanSheetActive">
+                <v-card
+                  class="text-center"
+                  height="100%"
+                >
+                  <v-card-text>
+                    <v-btn
+                      variant="text"
+                      @click="store.lokasiStore.togglePenugasanSheet()"
+                    >
+                      close
+                    </v-btn>
+          
+                    <br>
+                    <br>
+          
+                    <FormPenugasan :listKaryawanPenugasan="listPenugasan" />
+                  </v-card-text>
+                </v-card>
+              </v-bottom-sheet>
         
         </template>
     </AdminLayout>
@@ -86,20 +107,22 @@ import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Table from '@/Components/Lokasi/Table.vue'
 import FormAdd from '@/Components/Lokasi/FormAdd.vue'
 import FormEdit from '@/Components/Lokasi/FormEdit.vue'
+import FormPenugasan from '@/Components/Lokasi/FormEditPenugasan.vue'
 import SnackBar from '@/Components/SnackBar.vue';
 import { ref,inject,reactive,onMounted } from 'vue'
 import { storeToRefs } from "pinia";
 import {usePage} from '@inertiajs/vue3'
 const store = inject('store')
 
-const { isSheetActive,isEditSheetActive } = storeToRefs(store.lokasiStore);
+const { isSheetActive,isEditSheetActive,isPenugasanSheetActive } = storeToRefs(store.lokasiStore);
 
 
 const page = usePage();
 const props = defineProps({
-    listData:Object
+    listData:Object,
+    listPenugasan:Object,
 })
-console.log(page.props.listData);
+console.log(props.listPenugasan);
 
 
 const search = ref('')

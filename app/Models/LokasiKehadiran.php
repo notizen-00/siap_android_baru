@@ -27,5 +27,10 @@ class LokasiKehadiran extends Model
         return $this->LokasiPenugasan()->count();
     }
 
+    public function karyawan()
+    {
+        return $this->hasManyThrough(Karyawan::class, LokasiPenugasan::class, 'lokasi_id', 'id', 'id', 'karyawan_id')->with('divisi');
+    }
+
 
 }

@@ -28,9 +28,14 @@ class Karyawan extends Model
 
     protected $table = 'karyawan';
 
+    // public function divisi()
+    // {
+    //     return $this->hasOne(Divisi::class,'id','divisi_id');
+    // }
+
     public function divisi()
     {
-        return $this->hasOne(Divisi::class,'id','divisi_id');
+        return $this->belongsTo(Divisi::class, 'divisi_id', 'id');
     }
     public function user()
     {

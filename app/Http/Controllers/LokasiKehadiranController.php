@@ -18,8 +18,12 @@ class LokasiKehadiranController extends Controller
         $listData->each(function ($lokasi) {
             $lokasi->total_karyawan = $lokasi->countLokasiPenugasanKaryawan();
         });
+
+        $listPenugasan = LokasiKehadiran::with('karyawan')->with('lokasiPenugasan')->get();
+        // dd($listData);
         return Inertia::render('Lokasi/Index',[
-            'listData' => $listData
+            'listData' => $listData,
+            'listPenugasan' => $listPenugasan
         ]);
     }
 

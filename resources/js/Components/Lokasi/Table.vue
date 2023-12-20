@@ -5,6 +5,7 @@
       <template #flash_session>
         {{ $page.props.session.success ? $page.props.session.success : ""}}
       </template>
+      
     </Alert>
     <v-data-table
       :headers="headers"
@@ -26,19 +27,34 @@
             </v-btn>
           </td>
           <td>
-            <v-btn icon="fas fa-edit" color="info" size="small" @click.prevent="store.lokasiStore.editForm(item.raw.id)"></v-btn>
-            <v-btn icon="fas fa-trash" class="ml-3" color="red" size="small" @click="deletePost(item.raw.id)"></v-btn>
+            <v-btn  color="info" size="xsmall" @click.prevent="store.lokasiStore.editForm(item.raw.id)">
+              <template #append>
+                <v-icon size="15" class="m-1" >fas fa-edit</v-icon>
+              </template>
+            </v-btn>
+            <v-btn color="warning" @click="store.lokasiStore.togglePenugasanSheet()" class="ml-3" size="xsmall">
+              <template #append>
+                <v-icon size="15" class="m-1" >fas fa-bars-staggered</v-icon>
+              </template>
+            </v-btn>
+            <v-btn  class="ml-3" color="red" size="xsmall" @click="deletePost(item.raw.id)">
+              <template #append>
+                <v-icon size="15" class="m-1" >fas fa-trash</v-icon>
+              </template>
+            </v-btn>
           
           </td>
          
         </tr>
       </template>
     </v-data-table>
+   
     
   </template>
   <script setup>
   import { ref,inject } from 'vue';
   import Alert from '@/Components/App/Alert.vue';
+  import DialogModal from '@/Components/DialogModal.vue';
   import { router } from '@inertiajs/vue3'
   const store = inject('store')
   defineProps({

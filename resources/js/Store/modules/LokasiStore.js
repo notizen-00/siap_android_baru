@@ -5,6 +5,7 @@
     state: () => ({
       sheet: false,
       editSheet: false,
+      penugasanSheet: false,
       radius:10,
       center:{
         lat:-8.1665658046624,
@@ -20,11 +21,19 @@
       toggleEditSheet() {
         this.editSheet = !this.editSheet
       },
-      
+      togglePenugasanSheet(){
+  
+        this.penugasanSheet = !this.penugasanSheet
+      },
       changeRadius(value){
         this.radius = parseInt(value);
         
        
+      },
+      async fetchPenugasanKaryawan(){
+        const response = await axios.get('/api/karyawan/lokasi_penugasan');
+
+        console.log(response.data)
       },
       async Maps(){
         const apiKey = 'AIzaSyBeeo9yBypCnU7vRHINzcgKfFhS-huXAgo';
@@ -70,6 +79,10 @@
         this.center = value;
 
       },
+      async toggleDialogPenugasan()
+      {
+         this.dialogPenugasan = !this.dialogPenugasan
+      },
       async editForm(id) {
         try {
           const response = await axios.get(`/kelola_karyawan/lokasi/${id}/edit`);
@@ -112,6 +125,9 @@
         
         return this.center;
         
+      },
+      isPenugasanSheetActive(){
+        return this.penugasanSheet;
       },
       isEditSheetActive(){
         return this.editSheet;
