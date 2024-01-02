@@ -48,9 +48,15 @@ class KaryawanController extends BaseController
 
     public function getLokasiPenugasan()
     {
-        $id =  auth()->user()->id;
-        $data = LokasiPenugasan::with('lokasi')->where('users_id',$id)->get();
-        return $this->sendResponse($data,'Data Lokasi Penugasan Sukses');
+        
+        try{
+            $id =  auth()->user()->id;
+            $karyawan_id = Karyawan::where('users_id',$id)->first();
+            $data = LokasiPenugasan::with('lokasi')->where('karyawan_id',$karyawan_id->id)->get();
+            return $this->sendResponse($data,'Data Lokasi Penugasan Sukses');
+        }catch(Exception $e){
+            return $this->sendError($e->getMessage(), $e->getCode());
+        }
     }
     /**
      * Display the specified resource.

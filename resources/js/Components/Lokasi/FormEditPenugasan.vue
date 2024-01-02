@@ -17,7 +17,7 @@
                     </v-row>
                     <div class="h-100 overflow-auto mt-10">
                         <span class="text-red-400 mt-10">Karyawan Di tugaskan</span>
-                        <v-list lines="two" max-height="200" max-width="500" class="mx-auto mt-5 mb-5">
+                        <v-list lines="two" v-if="values.length > 0" max-height="200" max-width="500" class="mx-auto mt-5 mb-5">
                             <v-list-item
                                 class="bg-red-400"
                                 v-for="n in values"
@@ -26,8 +26,9 @@
                                 :subtitle="'Jabatan '+ n.jabatan"
                                 prepend-avatar="https://randomuser.me/api/portraits/women/8.jpg"
                             ></v-list-item>
-                            
-                            </v-list>
+                        </v-list>
+                        
+                        <span class="font-extrabold" v-else> 0</span>
                     </div>
                     <v-row>
                         <v-col cols="3">
@@ -83,9 +84,9 @@
     const listKaryawan = ref([]);
 
     const form = useForm({
-        nama_lokasi:getDetailPenugasan.value[0].lokasi.nama_lokasi,
+        nama_lokasi:getDetailPenugasan.value[0].lokasi ? getDetailPenugasan.value[0].lokasi.nama_lokasi : getDetailPenugasan.value[0].nama_lokasi,
         karyawan_id:values.value,
-        lokasi_id:getDetailPenugasan.value[0].lokasi.id
+        lokasi_id:getDetailPenugasan.value[0].lokasi ? getDetailPenugasan.value[0].lokasi.id : getDetailPenugasan.value[0].id
     })
     const props = defineProps({
         listKaryawanPenugasan:Object
@@ -106,7 +107,7 @@
             ...data,
             _token: page.props.auth.csrf,
             _method: "put",
-        })).post(route('lokasi_penugasan.update',getDetailPenugasan.value[0].lokasi.id), {
+        })).post(route('lokasi_penugasan.update',form.lokasi_id), {
             onFinish: (data) => {
                 if(data == 2){
                     alert('test')
@@ -119,17 +120,22 @@
 
     onMounted(()=>{
         getDetailPenugasan.value.forEach((user) => {
-        form.karyawan_id.push({
-            item:user.karyawan.nama_karyawan,
-            value:user.karyawan.id
+        if(user.karyawan == null){
+
+            console.log('kosong')
+        }else{
+            form.karyawan_id.push({
+            item:user.karyawan ?  user.karyawan.nama_karyawan : '-',
+            value:user.karyawan ? user.karyawan.id : '-'
         })
         values.value.push({
-            item:user.karyawan.nama_karyawan,
-            value:user.karyawan.id,
-            jabatan:user.karyawan.jabatan
+            item:user.karyawan ? user.karyawan.nama_karyawan : '-',
+            value:user.karyawan ? user.karyawan.id : '-',
+            jabatan:user.karyawan ? user.karyawan.jabatan : '-',
         })
+        }
     });
-        console.log(getKaryawan.value)
+        console.log(getDetailPenugasan.value)
         getKaryawan.value.forEach((user) => {
                 listKaryawan.value.push({
                 item: user.nama_karyawan,

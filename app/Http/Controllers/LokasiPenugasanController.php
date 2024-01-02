@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LokasiPenugasan;
+use App\Models\LokasiKehadiran;
 class LokasiPenugasanController extends Controller
 {
     /**
@@ -36,12 +37,14 @@ class LokasiPenugasanController extends Controller
     public function show(string $id_lokasi)
     {
         $data = LokasiPenugasan::with('karyawan')->with('lokasi')->where('lokasi_id',$id_lokasi)->get();
-
-        if($data){
-            return response()->json($data,200);
+        
+        if($data->isEmpty()){
+            $response = LokasiKehadiran::where('id',$id_lokasi)->get();
         }else{
-            return response()->json('gagal',201);
+            $response = $data;
         }
+
+        return response()->json($response,200);
 
     }
 
@@ -67,8 +70,9 @@ class LokasiPenugasanController extends Controller
                 'karyawan_id'=>$i 
             ];
         }
-        // dd($upsert);
-        $proses = LokasiPenugasan::upsert($upsert,['lokasi_id'],['karyawan_id']);
+
+        $proses = LokasiPenugasan::upsert($upsert,['lokasi_id','karyawan_id'],['lokasi_id']);
+
         if($proses){
             return to_route('lokasi.index');
         }else{

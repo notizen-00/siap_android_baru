@@ -43,10 +43,9 @@ class CheckPerangkat implements CheckAbsensiInterface
 
         $device = $this->checkDevice();
         if ($device) {
-          
             return true;
         }else{
-            $this->setError('Perangkat/Device Tidak Valid');
+            $this->setError('Perangkat/Device Terdeteksi duplikat');
             return false;
         }
 
@@ -55,13 +54,12 @@ class CheckPerangkat implements CheckAbsensiInterface
 
     public function getErrorObject()
     {
-       return $this->error;
+        return $this->error;
     }
 
     private function dataDevice():array
     {
         $data = [];
- 
             $data['nama_perangkat'] = $this->device['manufacturer'].'-'.$this->device['model'];
             $data['karyawan_id'] = $this->karyawanId;
             $data['model_perangkat'] = $this->device['model'];
@@ -71,15 +69,14 @@ class CheckPerangkat implements CheckAbsensiInterface
         
         return $data;
     }
+
     private function checkDevice():bool
     {
-        $device = Device::where('karyawan_id',$this->karyawanId)->first();
-
+        $device = Device::where('id_device',$this->device['id'])->first();
+        
         if(empty($device)){
-
-             $this->insertDevice();
-             return true;
-
+            $this->insertDevice();
+            return true;
         }else{
 
             if($device->id_device == $this->device['id']){
@@ -95,11 +92,9 @@ class CheckPerangkat implements CheckAbsensiInterface
 
     private function insertDevice()
     {
-
-       return Device::insert($this->dataDevice());
+        return Device::insert($this->dataDevice());
         
     }
- 
 
     
 }

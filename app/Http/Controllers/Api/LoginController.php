@@ -7,11 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\JsonResponse;
 use Laravel\Sanctum\PersonalAccessToken;
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 1c0644f (test)
 class LoginController extends BaseController
 {
 
