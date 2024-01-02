@@ -11,6 +11,7 @@ use App\Models\Presensi;
 use App\Services\Absensi\CheckLokasi;
 use App\Services\Absensi\CheckPerangkat;
 use App\Services\Absensi\CheckWaktu;
+use Carbon\Carbon;
 
 class AbsensiController extends BaseController
 {
@@ -31,6 +32,7 @@ class AbsensiController extends BaseController
     }
 
     public function simpanImage($base64Data) {
+
         $binaryData = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $base64Data));
     
         $filePath = 'image_presensi/' . uniqid() . '.jpg'; 
@@ -39,17 +41,33 @@ class AbsensiController extends BaseController
         return $filePath; 
     }
 
+    private function getJamSekarang()
+    {
+        $now = Carbon::now();
+        $formattedTime = $now->format('H:i:s');
+        return $formattedTime;
+    }
+
     public function doAbsen(Request $request)
     {
+
         $imageFilePath = $this->simpanImage($request->image);
 
-        $presensi = Presensi::create([
-            'karyawan_id'=>$request->karyawan_id,
-            'image'=>$imageFilePath,
+        try{
+            $presensi = Presensi::create([
+                'karyawan_id'=>$request->karyawan_id,
+                'jenis_presensi'=>$request->jenis_presensi,
+                'jam_presensi'=>$this->getJamSekarang(),
+                'status_presensi'=>1
+            ]);
             
-        ]);
 
-        return response()->json($request->device_id);
+            return $this->sendResponse('Berhasil',$presensi);
+
+        }catch(Exception $e){
+            return $this->sendError('Error',$e->getMessage());
+        }
+        // return response()->json($request->device_id);
     }
 
     /**
