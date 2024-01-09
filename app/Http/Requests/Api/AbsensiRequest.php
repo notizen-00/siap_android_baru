@@ -29,7 +29,8 @@ class AbsensiRequest extends FormRequest
             'radius'=>'integer|required',
             'karyawan_id'=>'integer|required',
             'device_id'=>'required|min:3',
-            'device'=>'required|array'
+            'device'=>'required|array',
+            'jenis_presensi'=>'required',
         ];
     }
 

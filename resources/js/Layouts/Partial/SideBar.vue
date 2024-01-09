@@ -112,7 +112,7 @@
         </Link>
         </v-list>
       </v-expand-transition>
-      <v-list-item color="primary" class="-mt-4"  @click.prevent="expand_kehadiran = !expand_kehadiran" value="kehadiran">
+      <v-list-item color="primary" :active="$page.url.startsWith('/kehadiran')" class="-mt-4"  @click.prevent="expand_kehadiran = !expand_kehadiran" value="kehadiran">
         <template #prepend>
             <v-icon size="small" :class="rail ? '' : 'ml-2'">fas fa-location-dot</v-icon>
         </template>
@@ -123,12 +123,14 @@
       </v-list-item>
       <v-expand-transition>
         <v-list density="compact">
-        <v-list-item rounded="xl" v-show="expand_kehadiran"  value="kehadiran">
+        <Link href="/kehadiran">
+        <v-list-item rounded="xl" v-show="expand_kehadiran" :active="$page.url === '/kehadiran'"  value="kehadiran">
             <template #prepend>
                 <v-icon size="10"  :class="rail ? '' : 'pl-10'">fas fa-minus</v-icon>
             </template>
             <span class="font-semibold text-sm">Kehadiran Harian</span>
         </v-list-item>
+        </Link>
         <v-list-item rounded="xl" v-show="expand_kehadiran"  value="data_karyawan">
             <template #prepend>
                 <v-icon size="10"  :class="rail ? '' : 'pl-10'">fas fa-minus</v-icon>

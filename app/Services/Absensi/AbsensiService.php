@@ -7,7 +7,7 @@ use Illuminate\Contracts\Container\Container;
 use App\Services\Absensi\CheckLokasi;
 use App\Services\Absensi\CheckPerangkat;
 use App\Services\Absensi\CheckWaktu;
-
+use App\Services\Absensi\CheckAbsensi;
 use App\Services\Absensi\CheckAbsensiInterface;
 
 class AbsensiService
@@ -18,8 +18,9 @@ class AbsensiService
     private $radius;
     private $karyawanId;
     private $deviceId;
+    private $jenis_presensi;
 
-    public function __construct(Container $container, $lokasiPenugasan, $lokasiKaryawan, $radius, $karyawanId, $deviceId)
+    public function __construct(Container $container, $lokasiPenugasan, $lokasiKaryawan, $radius, $karyawanId, $deviceId,$jenis_presensi)
     {
         $this->container = $container;
         $this->lokasiPenugasan = $lokasiPenugasan;
@@ -27,6 +28,7 @@ class AbsensiService
         $this->radius = $radius;
         $this->karyawanId = $karyawanId;
         $this->deviceId = $deviceId;
+        $this->jenis_presensi = $jenis_presensi;
     }
 
     public function passTest(): bool
@@ -40,13 +42,13 @@ class AbsensiService
             'deviceId' => $this->deviceId,
         ]);
         $waktuInstance = $this->resolve(CheckAbsensiInterface::class, CheckWaktu::class);
-
+        $absensiInstance = $this->resolve(CheckAbsensiInterface::class, CheckAbsensi::class);
 
         $lokasiResult = $lokasiInstance->checkResult();
         $perangkatResult = $perangkatInstance->checkResult();
         $waktuResult = $waktuInstance->checkResult();
-
-        return $lokasiResult && $perangkatResult && $waktuResult;
+        $absensiResult = $absensiInstance->checkResult();
+        return $lokasiResult && $perangkatResult && $waktuResult && $absensiResult;
     }
 
     protected function resolve($interface, $class, $parameters = [])

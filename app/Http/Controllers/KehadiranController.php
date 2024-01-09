@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
+use App\Models\Karyawan;
 class KehadiranController extends Controller
 {
     /**
@@ -11,7 +12,10 @@ class KehadiranController extends Controller
      */
     public function index()
     {
-        //
+        $listData = Karyawan::with('divisi')->with('user')->with('presensiToday')->get();
+        return Inertia::render('Kehadiran/Index',[
+            'listData'=>$listData
+        ]);    
     }
 
     /**

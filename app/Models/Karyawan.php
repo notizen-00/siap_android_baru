@@ -41,11 +41,14 @@ class Karyawan extends Model
     {
         return $this->hasOne(User::class,'id','users_id');
     }
+    public function presensiToday()
+    {
+        return $this->hasOne(Presensi::class, 'karyawan_id', 'id')
+        ->whereDate('created_at', today());
+    }
 
     public function lokasi_penugasan()
     {
         return $this->hasOne(LokasiPenugasan::class,'users_id','users_id');
     }
-
- 
 }

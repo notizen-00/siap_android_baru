@@ -72,7 +72,7 @@ class CheckWaktu implements CheckAbsensiInterface
 
     public function getErrorObject()
     {
-       return $this->error;
+        return $this->error;
     }
 
     private function setRulesPresensi($data_rules):object
@@ -99,7 +99,7 @@ class CheckWaktu implements CheckAbsensiInterface
         
         $this->setPolahariId($karyawan->divisi->polahari_id);
         
-           return $polakerja;
+            return $polakerja;
         }else{
             return $polakerja;
         }
@@ -129,16 +129,16 @@ class CheckWaktu implements CheckAbsensiInterface
 
         $data = $this->getPolaKerja();
         $response = '';
-         if(!empty($data)){
+            if(!empty($data)){
 
             // $this->setError($this->jam_now);
             $response = true;  
-         }else{
+            }else{
             $this->setError('Hari ini Libur Tidak dapat absen');
             $response = false;
-         }
+            }
 
-         return $response;   
+            return $response;   
     }
 
     private function validasiWaktuNow(): bool
