@@ -46,5 +46,7 @@ Route::middleware([
     Route::resource('kelola_karyawan/lokasi',$controller.'\LokasiKehadiranController');
     Route::resource('kelola_karyawan/lokasi_penugasan',$controller.'\LokasiPenugasanController');
     Route::resource('kehadiran',$controller.'\KehadiranController');
+    Route::get('detail_presensi/{type}/detail',[$controller.'\DetailPresensiController','detail']);
+    Route::resource('detail_presensi',$controller.'\DetailPresensiController');
     
 });

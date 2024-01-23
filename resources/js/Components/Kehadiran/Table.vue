@@ -26,18 +26,7 @@
             </td>
             <td class="text-center">
                 <div class="d-flex justify-center w-full mt-4" v-if="item.raw.presensi_today">
-                <v-btn class="" icon="fas fa-mobile" size="5">
-                </v-btn>
-                <v-btn class="ml-5" icon="fas fa-location-dot" color="green" variant="outline" size="5">
-                </v-btn>
-                <v-btn class="ml-5" icon="far fa-calendar" size="5">
-                </v-btn>
-                <v-btn class="ml-6" icon="far fa-sticky-note" size="5">
-                </v-btn>
-                <v-btn class="ml-6" icon="fas fa-camera" size="5">
-                </v-btn>
-                <v-btn class="ml-6" icon="fas fa-pen-to-square" size="5">
-                </v-btn>
+                  <Action :idAction="item.raw.id"></Action>
                 </div>
 
                 <span v-else>Tidak Hadir / Belum Absen</span>
@@ -47,7 +36,7 @@
             </div>
             </td>
             <td>-</td>
-            <td><v-btn icon="fas fa-cog" size="small"></v-btn></td>
+            <td>-</td>
             <td>-</td>
             <td><v-btn icon="fas fa-edit" size="small"></v-btn></td>
         </tr>
@@ -57,7 +46,7 @@
   </template>
   <script setup>
   import { ref } from 'vue';
-  
+  import Action from '@/Components/Kehadiran/Action.vue'
  const props = defineProps({
     search:String,
     listData:Object

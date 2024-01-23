@@ -6,7 +6,8 @@ import { useDivisiStores } from './divisiStore'
 import { useKaryawanStore } from './karyawanStore'
 import { useLokasiStore } from './LokasiStore'
 import { useAlertStore } from './alertStore'
-
+import {useLokasiActionStore} from './Action/lokasiStore'
+import {usePerangkatActionStore} from './Action/perangkatStore'
 // Impor modul-modul lain jika ada
 
 export function useStore() {
@@ -18,6 +19,8 @@ export function useStore() {
     karyawanStore:useKaryawanStore(),
     lokasiStore:useLokasiStore(),
     alertStore:useAlertStore(),
+    lokasiActionStore:useLokasiActionStore(),
+    perangkatActionStore:usePerangkatActionStore(),
     // Masukkan modul-modul lain di sini jika ada
   }
 }

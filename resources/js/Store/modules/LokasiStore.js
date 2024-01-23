@@ -23,12 +23,10 @@
         this.editSheet = !this.editSheet
       },
       togglePenugasanSheet(){
-  
         this.penugasanSheet = !this.penugasanSheet
       },
       changeRadius(value){
         this.radius = parseInt(value);
-        
       },
       async fetchPenugasanKaryawan(){
         const response = await axios.get('/api/karyawan/lokasi_penugasan');
