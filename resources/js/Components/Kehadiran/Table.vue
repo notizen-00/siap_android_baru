@@ -26,9 +26,9 @@
             </td>
             <td class="text-center">
                 <div class="d-flex justify-center w-full mt-4" v-if="item.raw.presensi_today">
-                  <Action :idAction="item.raw.id"></Action>
+                  <Action :idAction="item.raw.presensi_today.id"></Action>
+                  <!-- {{ item.raw.presensi_today.id }} -->
                 </div>
-
                 <span v-else>Tidak Hadir / Belum Absen</span>
                 <br>
                 <div class="mb-4 mt-3">
@@ -38,7 +38,7 @@
             <td>-</td>
             <td>-</td>
             <td>-</td>
-            <td><v-btn icon="fas fa-edit" size="small"></v-btn></td>
+  
         </tr>
         </template>
     </v-data-table>

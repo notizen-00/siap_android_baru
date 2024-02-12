@@ -63,16 +63,10 @@ class DetailPresensiController extends Controller
         //
     }
 
-    public function detail(string $type,$id_presensi)
+    public function detail(string $id)
     {   
-        if($type == 'lokasi'){
-            return $this->detail_lokasi($id_presensi);
-        }
-    }
-
-    private function detail_lokasi($id)
-    {
-        $data = Presensi::findOrFail($id);
+        $data = Presensi::with('detail_presensi')->where('id',$id)->first();
         return response()->json($data);
     }
+
 }

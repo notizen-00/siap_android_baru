@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useLokasiActionStore = defineStore('lokasiActionStore', {
     state: () => ({
-    dialog: true,
+    dialog: false,
     }),
     actions: {
     toggleDialog() {

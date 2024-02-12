@@ -18,4 +18,15 @@ class DetailPresensi extends Model
     ];
 
     protected $table = 'detail_presensi';
+
+    public function getDetailPerangkatAttribute($value)
+    {
+        return unserialize($value);
+    }
+
+    public function getDetailLokasiAttribute($value)
+    {
+        return unserialize($value);
+    }
+    
 }

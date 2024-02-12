@@ -17,4 +17,9 @@ class Presensi extends Model
     ];
 
     protected $table = 'presensi';
+
+    public function detail_presensi()
+    {
+        return $this->hasOne(DetailPresensi::class);
+    }
 }

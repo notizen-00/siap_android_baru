@@ -8,6 +8,7 @@ import { useLokasiStore } from './LokasiStore'
 import { useAlertStore } from './alertStore'
 import {useLokasiActionStore} from './Action/lokasiStore'
 import {usePerangkatActionStore} from './Action/perangkatStore'
+import { useCameraActionStore } from './Action/cameraStore'
 // Impor modul-modul lain jika ada
 
 export function useStore() {
@@ -21,6 +22,7 @@ export function useStore() {
     alertStore:useAlertStore(),
     lokasiActionStore:useLokasiActionStore(),
     perangkatActionStore:usePerangkatActionStore(),
+    cameraActionStore:useCameraActionStore()
     // Masukkan modul-modul lain di sini jika ada
   }
 }

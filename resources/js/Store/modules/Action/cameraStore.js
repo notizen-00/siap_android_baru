@@ -1,7 +1,7 @@
 // src/store/modules/alert.js
 import { defineStore } from 'pinia'
 
-export const usePerangkatActionStore = defineStore('perangkatActionStore', {
+export const useCameraActionStore = defineStore('cameraActionStore', {
     state: () => ({
     dialog: false,
     detail:[]
@@ -9,10 +9,14 @@ export const usePerangkatActionStore = defineStore('perangkatActionStore', {
     actions: {
     toggleDialog() {
         this.dialog = !this.dialog
+        this.detail = ''
     },
     async fetchDetail(id){
         const response = await axios.get('/detail_presensi/'+ id +'/detail')
-        this.detail = response.data.detail_presensi.detail_perangkat
+        this.detail = response.data.detail_presensi.foto_presensi
+        console.log(response.data.detail_presensi)
+        console.log(response.data.detail_presensi.foto_presensi)
+
     }
     },
     getters: {
