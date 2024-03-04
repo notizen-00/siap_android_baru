@@ -72,14 +72,14 @@ class CheckPerangkat implements CheckAbsensiInterface
 
     private function checkDevice():bool
     {
-        $device = Device::where('id_device',$this->device['id'])->first();
+        $device = Device::where('id_device',$this->device['id'])->where('karyawan_id',$this->karyawanId)->first();
         
         if(empty($device)){
             $this->insertDevice();
             return true;
         }else{
 
-            if($device->id_device == $this->device['id']){
+            if($device->id_device == $this->device['id'] && $device->karyawan_id == $this->karyawanId){
                 
                 $this->setResponseData('id_device', $this->device['id']);
                     return true;
